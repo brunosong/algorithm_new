@@ -8,6 +8,7 @@ class AlgorithmNewApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }
