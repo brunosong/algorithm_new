@@ -3,9 +3,7 @@ package com.brunosong.algorithm_new.프로그래머스LV1;
 
 import java.rmi.registry.LocateRegistry;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class 개인정보수집유효기간 {
 
@@ -18,13 +16,16 @@ public class 개인정보수집유효기간 {
         String today = "2022.05.19";
         String[] terms = {"A 6", "B 12", "C 3"};
         String[] privacies =  {"2021.05.02 A", "2021.07.01 B", "2022.02.19 C", "2022.02.20 C"};
-        solution2(today,terms,privacies);
+
+        System.out.println(Arrays.toString(solution2(today,terms,privacies)));
 
     }
 
 
+    public static int ONE_YEAR_MONTH_CNT = 12;
+    public static int ONE_MONTH_DAY_CNT = 28;
+
     public static int[] solution2(String today, String[] terms, String[] privacies) {
-        int[] answer = {};
 
         Map<String,Integer> termsMap = new HashMap<>();
 
@@ -32,37 +33,51 @@ public class 개인정보수집유효기간 {
             termsMap.put( t.split(" ")[0], Integer.parseInt(t.split(" ")[1]));
         }
 
-        for (String dateType : privacies) {
+        List<Integer> answer = new ArrayList<>();
 
-            String type = dateType.substring(dateType.length() - 1);
-            String date = dateType.replaceAll("\\D", "");
+        //오늘 날짜를 카운트로 구하자
+        int todayCnt = getDays(today);
 
+        for (int i = 0; i < privacies.length; i++) {
+
+            String[] dateType = privacies[i].split(" ");
+            String date = dateType[0];
+            String type = dateType[1];
+
+            //시작 날짜를 구하자
+            int startCnt = getDays(date);
+
+            //시작날짜와 유효기간 날짜를 더해준다.
             Integer nextMonth = termsMap.get(type);
+            //보관 가능한 최종일자
+            int totalDate = startCnt + (nextMonth * ONE_MONTH_DAY_CNT) - 1;
 
-            int year = Integer.parseInt(date.substring(0, 4));
-            int month = Integer.parseInt(date.substring(4, 6));
-            int day = Integer.parseInt(date.substring(6, 8));
-
-            int oneMonthDay = 28;
-            int nextDay = nextMonth * oneMonthDay;
-
-            //총 날짜를 데이로 구하자
-            int nowDateCnt = (year * 12 * oneMonthDay) + (month * oneMonthDay) + day;
-
-            int afterDateCnt = nowDateCnt + nextDay - 1;
-
-            year = afterDateCnt / 12 / oneMonthDay;
-            month = (afterDateCnt - (year * oneMonthDay * 12)) / oneMonthDay;
-            day = (afterDateCnt - ((year) * oneMonthDay * 12)) % oneMonthDay;
-
-            System.out.print(year + " ");
-            System.out.print(month + " ");
-            System.out.print(day + " ");
-            System.out.println("  ");
+            //오늘 날짜의 카운트랑 보관가능한 최종일자의 카운트를 비교해서 최종일자의 카운트가 오늘날짜보다 적으면 파기다
+            if(todayCnt > totalDate) {  //유효기간이 남은거
+                answer.add(i+1);
+            }
 
         }
-        return answer;
+
+        return answer.stream().mapToInt(value -> value).toArray();
     }
+
+
+    public static int getDays ( String date ){
+
+
+        String[] temp = date.split("\\.");
+
+        int year = Integer.parseInt(temp[0]);
+        int month = Integer.parseInt(temp[1]);
+        int day = Integer.parseInt(temp[2]);
+
+        //총 날짜를 데이로 구하자
+        int dateCnt = (year * ONE_YEAR_MONTH_CNT * ONE_MONTH_DAY_CNT) + (month * ONE_MONTH_DAY_CNT) + day;
+
+        return dateCnt;
+    }
+
 
 
     public static int[] solution(String today, String[] terms, String[] privacies) {
@@ -85,6 +100,13 @@ public class 개인정보수집유효기간 {
 
         return answer;
     }
+
+
+    //todo. 나중에 이거 꼭한번 구해보기  ( 데이로 만들었던 날짜를 2022.xx.xx로 만들기 )
+    //   year = afterDateCnt / 12 / oneMonthDay;
+    //   month = (afterDateCnt - (year * oneMonthDay * 12)) / oneMonthDay;
+    //   day = (afterDateCnt - ((year) * oneMonthDay * 12)) - 1 % oneMonthDay;  마지막 한자리가 문제임...
+
 
 
 
