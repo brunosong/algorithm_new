@@ -66,6 +66,10 @@ public class StringTest {
             sb.append(chars1[i]);
             sb.append(chars2[i]);
         }
+        int sum = 0;
+        for(char c : chars1) {
+            sum += Character.getNumericValue(c);
+        }
 
         System.out.println(sb.toString()
         );
