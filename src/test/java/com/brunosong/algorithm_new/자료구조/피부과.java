@@ -73,12 +73,14 @@ public class 피부과 {
         int answer = 0;
         int n = enter.length;
         int[][] inList = new int[n][2];
+
         for(int i = 0; i < n; i++){
             int a = getTime(enter[i].split(" ")[0]);
             int b = Integer.parseInt(enter[i].split(" ")[1]);
             inList[i][0] = a;
             inList[i][1] = b;
         }
+
         Queue<Integer> Q = new LinkedList<>();
         Q.offer(inList[0][1]);
         int fT = inList[0][0];
@@ -92,12 +94,15 @@ public class 피부과 {
                 Q.offer(inList[pos][1]);
                 pos++;
             }
+
             if(t == fT && !Q.isEmpty()){
                 int idx = Q.poll();
                 fT += laser[idx];
             }
+
             answer = Math.max(answer, Q.size());
         }
+
         return answer;
     }
 
