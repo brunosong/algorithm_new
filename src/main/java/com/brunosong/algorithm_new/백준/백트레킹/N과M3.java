@@ -1,4 +1,4 @@
-package com.brunosong.algorithm_new.백트레킹;
+package com.brunosong.algorithm_new.백준.백트레킹;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,8 +9,7 @@ import java.util.Scanner;
 
 public class N과M3 {
 
-    @Test
-    void test() throws Exception{
+    public static void main(String[] args) throws IOException {
 
         Scanner sc = new Scanner(System.in);
 //        int m = sc.nextInt();
@@ -29,7 +28,7 @@ public class N과M3 {
         bw.close();
     }
 
-    void printNums(int l, int m, int n, int[] dis,BufferedWriter bw) throws IOException {
+    public static void printNums(int l, int m, int n, int[] dis,BufferedWriter bw) throws IOException {
 
         if(l == m) {
             for (int i = 0; i < dis.length; i++) {
