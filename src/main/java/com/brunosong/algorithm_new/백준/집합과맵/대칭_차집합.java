@@ -3,6 +3,8 @@ package com.brunosong.algorithm_new.백준.집합과맵;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class 대칭_차집합 {
 
@@ -10,24 +12,29 @@ public class 대칭_차집합 {
         Scanner sc = new Scanner(System.in);
 
         String N = sc.nextLine();
-        int aCnt = Integer.parseInt(N.split(" ")[0]);
-        int bCnt = Integer.parseInt(N.split(" ")[1]);
 
         String A = sc.nextLine();
+        Set<Integer> aSet = Stream.of(A.split(" "))
+                .map(Integer::parseInt)
+                .collect(Collectors.toSet());
+
         String B = sc.nextLine();
-
-        Set<Integer> aSet = new HashSet<>();
-        for (int i = 0; i < aCnt; i++) {
-             aSet.add(Integer.parseInt(A.split(" ")[i]));
-        }
-
-        Set<Integer> bSet = new HashSet<>();
-        for (int i = 0; i < bCnt; i++) {
-            bSet.add(Integer.parseInt(B.split(" ")[i]));
-        }
+        Set<Integer> bSet = Stream.of(B.split(" "))
+                .map(Integer::parseInt)
+                .collect(Collectors.toSet());
 
         int cnt = 0;
 
+        for (int a : aSet) {
+            if (!bSet.contains(a)) {
+                cnt++;
+            }
+        }
+
+        bSet.removeAll(aSet);
+        cnt += bSet.size();
+
+        System.out.println(cnt);
 
     }
 }
