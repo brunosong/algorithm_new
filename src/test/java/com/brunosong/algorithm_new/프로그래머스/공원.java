@@ -1,17 +1,17 @@
 package com.brunosong.algorithm_new.프로그래머스;
 
+import com.jayway.jsonpath.internal.function.numeric.Max;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class 공원 {
 
     @Test
     void test() {
 
-        int[] mats = {5,3,2};
+        int[] mats = {1};
         String[][] park = {
             {"A", "A", "-1", "B", "B", "B", "B", "-1"},
             {"A", "A", "-1", "B", "B", "B", "B", "-1"},
@@ -24,61 +24,43 @@ public class 공원 {
     }
 
     public int solution(int[] mats, String[][] park) {
-        int answer = 0;
-        int[] dx = {-1,1, 0,0};
-        int[] dy = { 0,0, -1,1};
-        int parkXSize = park.length;
+
+        int max = -1;
+
+        Integer[] matsBox = Arrays.stream(mats).boxed().toArray(Integer[]::new);
+        Arrays.sort(matsBox, Collections.reverseOrder());
 
         for (int x = 0; x < park.length; x++) {
             for (int y = 0; y < park[x].length; y++) {
                 if (park[x][y].equals("-1")) {
-                    int tempX = 1;
-                    int tempY = 1;
-
-                    //위만 확인
-                    int nx = x - 1;
-                    if (nx >= 0) {
-                        // 알파벳이 아니면 무조건 1:1이런식이다
-                        if (!park[nx][y].matches("[A-Z]")) {
-                            String value = park[nx][y];
-                            String[] xy = value.split(":");
-                            tempX += Integer.parseInt(xy[0]);
-                        }
-                    }
-
-                    //왼쪽만 확인
-                    int ny = y - 1;
-                    if (ny >= 0) {
-                        // 알파벳이 아니면 무조건 1:1이런식이다
-                        if (!park[x][ny].matches("[A-Z]")) {
-                            String value = park[x][ny];
-                            String[] xy = value.split(":");
-                            tempX += Integer.parseInt(xy[1]);
-                        }
-                    }
-                    park[x][y] = String.format("%d:%d", tempX, tempY);
-
+                    int size = matchMats(x,y,matsBox,park);
+                    max = Math.max(max,size);
                 }
             }
         }
 
-
-        return answer;
+        return max;
     }
 
-    public int findBigMatsSize(int x, int y) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{x,y});
+    public int matchMats(int x, int y, Integer[] mats, String[][] park) {
+        for (int size : mats) {
+            int ex = x + size-1;
+            int ey = y + size-1;
+            boolean ch = true;
 
-        int[] pox = {};
+            if (ex >= park.length || ey >= park[0].length) continue;
 
-        while (!queue.isEmpty()) {
-
-
-
+            outerLoop:
+            for (int i = x; i <= ex; i++) {
+                for (int j = y; j <= ey; j++) {
+                    if(!park[i][j].equals("-1")) {
+                        ch = false;
+                        break outerLoop;
+                    }
+                }
+            }
+            if (ch) return size;
         }
-
-        return 0;
+        return -1;
     }
-
 }
