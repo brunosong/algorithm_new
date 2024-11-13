@@ -9,27 +9,29 @@ public class 미로탐색 {
         int n = Integer.parseInt(nm[0]);
         int m = Integer.parseInt(nm[1]);
 
-        String[][] board = new String[n][m];
+        int[][] board = new int[n][m];
         for (int i = 0; i < n; i++) {
             String s = sc.nextLine();
             String[] split = s.split("");
             for (int j = 0; j < board[i].length; j++) {
-                board[i][j] = split[j];
+                board[i][j] = Integer.parseInt(split[j]);
             }
         }
 
-        System.out.println(findShortRoad(board));
+        System.out.println(findShortRoad(board,n,m));
 
     }
 
-    public static int findShortRoad(String[][] board) {
+    public static int findShortRoad(int[][] board, int n, int m) {
         Queue<int[]> queue = new LinkedList<>();
-        int x = 0;
-        int y = 0;
+        boolean[][] visited = new boolean[n][m];
 
-        queue.add(new int[]{x,y});
+        queue.add(new int[]{0,0});
+        visited[0][0] = true;
+
         int[] dx = {-1,0,1, 0};
         int[] dy = { 0,1,0,-1};
+
         int level = 1;
 
         while (!queue.isEmpty()) {
@@ -37,24 +39,24 @@ public class 미로탐색 {
 
             for (int i = 0; i < size; i++) {
                 int[] current = queue.poll();
-                board[current[0]][current[1]] = "0";
 
                 for (int d = 0; d < 4; d++) {
                     int nx = current[0] + dx[d];
                     int ny = current[1] + dy[d];
 
-                    if (board.length <= nx || nx < 0 || board[0].length <= ny || ny < 0) continue;
-                    if (board[nx][ny].equals("1")) {
+                    if (board.length <= nx || nx < 0 || board[0].length <= ny || ny < 0 || visited[nx][ny]) continue;
+                    if (board[nx][ny] == 1) {
                         if (nx == board.length-1 && ny == board[0].length-1) {
                             return level + 1;
                         }
                         queue.add(new int[]{nx,ny});
+                        visited[nx][ny] = true;
                     }
                 }
             }
             level++;
         }
 
-        return 0;
+        return -1;
     }
 }
