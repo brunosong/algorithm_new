@@ -3,22 +3,24 @@ from collections import deque
 def solution(ingredient):
     answer = 0
     stack = deque()
-    check_list = []
-    
+
     for item in ingredient:
         if item == 1:
-            for i,c in enumerate(range(3,1,-1)):
-                if c == check_list[0]:
-                    check_list.pop()
-                else:
-                    break
+            check_cnt = 3
+            temp = []
+            while len(stack) > 0 and stack[-1] == check_cnt:
+                temp.append(stack.pop())
+                check_cnt -= 1
+
+            if check_cnt == 0:
+                answer += 1
+            else:
+                while temp:
+                    stack.append(temp.pop())
+                stack.append(item)
         else:
             stack.append(item)
-            check_list.append(item)
-        
-    
-    print(stack)
-    
+
     return answer
 
-solution([2, 1, 1, 2, 3, 1, 2, 3, 1])
+print(solution([2, 1, 1, 2, 3, 1, 2, 3, 1]))
