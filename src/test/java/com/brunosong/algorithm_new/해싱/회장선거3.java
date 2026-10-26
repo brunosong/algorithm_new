@@ -54,9 +54,9 @@ public class 회장선거3 {
 
         Map<String, Integer> present = new HashMap<>();
         int max = Integer.MIN_VALUE;
-        for (String a : recommend.keySet()){
+        for (String a : recommend.keySet()) {
             int cnt = 0;
-            for (String b : recommend.get(a)){
+            for (String b : recommend.get(a)) {
                 if (candidate.get(b) >= n) cnt++;
             }
             present.put(a, cnt);
